@@ -2,6 +2,7 @@
 #define LOGMONITOR_H
 
 #include <string>
+#include <thread>
 
 class LogMonitor
 {
@@ -9,10 +10,12 @@ class LogMonitor
         const std::string m_filename;
         FILE *m_fp;
         bool m_interrupt;
+        std::thread m_Thread;
 
     public:
         LogMonitor(const std::string &filename);
         ~LogMonitor();
+        void run();
         void start();
         void stop();
 

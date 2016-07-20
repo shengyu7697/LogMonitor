@@ -25,19 +25,19 @@ LogMonitor::LogMonitor(const std::string &filename)
     , m_fp(NULL)
     , m_interrupt(false)
 {
-    m_open();
 }
 
 LogMonitor::~LogMonitor()
 {
-    m_close();
 }
 
-void LogMonitor::start()
+void LogMonitor::run()
 {
     char buf[BUF_SIZE];
     long int size;
     long int totalSize;
+
+    m_open();
 
     size = ftell(m_fp);
     totalSize = m_getFileSize();
@@ -60,6 +60,14 @@ void LogMonitor::start()
         }
         totalSize = m_getFileSize();
     }
+
+    m_close();
+}
+
+void LogMonitor::start()
+{
+    m_Thread = std::thread(&LogMonitor::run, this);
+    m_Thread.detach();
 }
 
 void LogMonitor::stop()
